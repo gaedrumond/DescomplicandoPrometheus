@@ -1,0 +1,67 @@
+Tutorial de como instalar o prometheus como um serviço em uma maquina linux
+
+- O que esse tutorial ira tratar:
+  - Como fazer o download do prometheus via linha de comando
+  - Como organizar os arquivos do prometheus para que ele funcione como um serviço
+
+- O que esse tutorial não ira tratar:
+  - Explicação dos comandos de shell do linux
+  - Explicação da estrutura de diretorios do linux
+
+
+Primeiro passo é necessário fazer o download do prometheus, descompacta-lo e organizar seus arquivos nos devidos diretórios. Para isso digite no shell:
+
+1.      curl -LO https://github.com/prometheus/prometheus/releases/download/v2.38.0/prometheus-2.38.0.linux-amd64.tar.gz
+
+2.      tar -xvf prometheus-2.38.0.linux-amd64.tar.gz
+
+3.      cd prometheus-2.38.0.linux-amd64
+
+4.      mv prometheus /usr/local/bin
+
+5.      mv promtool /usr/local/bin
+
+6.      mkdir /etc/prometheus
+
+7.      cp prometheus.yml /etc/prometheus
+
+8.      mv consoles /etc/prometheus
+
+9.      mv console_library /etc/prometheus
+
+10.     mkdir /var/lib/prometheus
+
+Após isso, crie o arquivo de configuração do prometheus como um serviço com o comando:
+
+        touch /etc/systemd/system/prometheus.service
+    
+    OBS: o conteudo que devera ser escrito dentro desse arquivo encontra-se no diretório "conf/prometheus.service" desse repositório
+
+O proximo passo é adicionar o grupo e o usuario 'prometheos' e coloca-lo como dono dos arquivos referente ao promethes na nossa maquina. Para tanto, digite os seguintes comandos no shell:
+
+1.      addgroup --system prometheus
+
+2.      adduser --shell /sbin/nologin --system --group prometheus
+
+3.      chown -R prometheus:prometheus /etc/prometheus
+
+4.      chown -R prometheus:prometheus /var/lib/prometheus
+
+5.      chown -R prometheus:prometheus /usr/local/bin/prometheus
+
+6.      chown -R prometheus:prometheus /usr/local/bin/promtool
+
+Por fim, é necessário fazer o reload do systemd. Após isso você podera iniciar o prometheus como um serviço do linux. Digite os seguntes comandos:
+
+1.      systemctl daemon-reload
+
+2.      systemctl start prometheus
+
+
+Para permitir o uso do prometheus pela linha de comando digitando apenas a palavra 'prometheus' digite:
+
+1.      systemctl enable prometheus
+
+E, por fim, para checar o status do prometheus que foi iniciado anteriormente, digite:
+
+1.      systemctl status prometheus

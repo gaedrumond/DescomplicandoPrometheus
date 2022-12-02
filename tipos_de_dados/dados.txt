@@ -1,0 +1,9 @@
+O prometheus trabalha com quatro tipos de métricas: Counter, Gauge, Histogram e Summary. Mas o que cada um desses tipos nos informa? O que são? Onde vivem? O que comem? Vou explicar brevemente a seguir.
+
+A primeira métricas que vamos entender é a Counter. Seu nome descreve bem sua função. Ela traz valores como um contador de fato. Onde seu valor pode apenas ser acrecido ou resetado para zero. É uma otima metrica para medirmos o número de requests feito a uma api em um determinado periodo de tempo.
+
+Já a metrica Gauge traz valores que podem variar tanto pra cima como para baixo ao longo do tempo. Ela funciona como um velocimetro de um carro, que pode mostrar 100 km/h, depois 50 km/h e depois 80km/h. Seu uso é ideal para entendermos, em numeros brutos, a latencia de um request, por exemplo.
+
+Agora sobraram duas metrics mais complexas e da familia 'iguais mas diferentes'. Ambas são metricas de observação de amostras, medindo tanto o numero de ""pontos"" observados como a soma destes. Mas então, quando elas são diferentes?
+Elas se diferenciam, principalmente em casos de uso. O Histogram é a melhor opção para quando você tem ""pontos"" a serem observados que tem uma variação dentro de um range ja conhecido e poderia ser encaixado em um bucket baseado nisso. Isso signifia que o percentil é calculado antes da metrica ir para o bucket. Ou seja, nos ja a recebemos com os calculos e não temos flexibilidade para decidir o percentile.
+De forma oposta, quando falamos de percentile, funciona a Summary. Isso é, nessa metrica, o percentile é calculado 'client-side'. O que nos da maior flexibilidad caso queiramos uma amostragem especifica que não esta contemplada pelos buckets do Histogram.
